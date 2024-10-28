@@ -1,4 +1,4 @@
-const subscriptionsService = require('../Services/subsCriptionService');
+const subscriptionsService = require('../Services//subscriptionService');
 const express = require('express');
 const router = express.Router();
 const protectRoute = require('../middleware/protectRoute');

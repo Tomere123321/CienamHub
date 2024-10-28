@@ -3,8 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const express = require("express");
 const app = express();
-const {fetchMoviesFromWs} = require("./Services/DataSync/moviesWS");
-const {fetchMembersFromWs} = require("./Services/DataSync/membersWs");
+const {fetchMoviesFromWs} = require("../BackEnd/WebServices/moviesWS");
+const {fetchMembersFromWs} = require("../BackEnd/WebServices/membersWs");
 
 mongoose.connect("mongodb://127.0.0.1:27017/moviesSubManager").then(() => console.log("Connected to DB"));
 
@@ -26,6 +26,9 @@ app.use("/subscriptions", subscriptionsController);
 
 const usersController = require("./Controllers/usersControllers");
 app.use("/users", usersController);
+
+const permissionsController = require("./Controllers/permissionsController");
+app.use("/permissions", permissionsController);
 
 
 // http://localhost:8000

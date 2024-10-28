@@ -28,14 +28,14 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('add/', async (req, res) => { 
+router.post('/add', async (req, res) => { 
     try {
         const newData = req.body;
         const newUser = await userService.CreateUser(newData); 
          return res.status(201).json({ message: newUser });
     
         } catch (e) {
-        console.log('Error in createUser:', e.message);
+        console.log('Error in addUser:', e.message);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
