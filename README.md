@@ -1,4 +1,4 @@
-# Movies_Subscriptions_Manager
+# Movies_Subscriptions_Management
 Movies & Subscription Management App
 
 
