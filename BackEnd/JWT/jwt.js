@@ -1,8 +1,13 @@
 const jwt = require("jsonwebtoken");
 let secretKey = "secretKey";
+const usersJsonService = require("../Services/usersJsonService");
+
+const user = usersJsonService.getUserByIdFromJson(userId);
+const expiresIn = `${user.sessionTimeOut}m`; 
+
 
 const generateToken = (userId) => {
-  return jwt.sign({ userId }, secretKey, { expiresIn: "2h" });
+  return jwt.sign({ userId }, secretKey, { expiresIn });
 };
 
 

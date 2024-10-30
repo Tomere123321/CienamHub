@@ -13,7 +13,7 @@ const getUserByIdFromJson = async (id) => {
 const addUserFromJson = async (newUser) => {
     const Users = await getUsersFromJson()
     Users.push(newUser)
-    return await jsonFile.writeFile('./Data/users.json', Users);
+    return await jsonFile.writeFile('./Data/users.json', Users, { spaces: 2 });
 }
 
 const updateUserFromJson = async (id, newData) => {
@@ -33,7 +33,7 @@ const deleteUserFromJson = async (id) => {
     const Users = await getUsersFromJson();
     const index = Users.findIndex(user => user.id === id);
     Users.splice(index, 1);
-    return await jsonFile.writeFile('./Data/users.json', Users);
+    return await jsonFile.writeFile('./Data/users.json', Users, { spaces: 2 });
 }
 
 module.exports = { getUsersFromJson, getUserByIdFromJson, addUserFromJson, updateUserFromJson, deleteUserFromJson };

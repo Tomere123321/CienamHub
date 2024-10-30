@@ -1,6 +1,6 @@
 const userModel = require("../Models/userModel");
-const {deleteUserFromJson,} = require("../Services/usersJsonService");
-const {  deletePermission } = require("./permissionsJsonService");
+const usersJsonService = require("../Services/usersJsonService");
+const permissions = require("./permissionsJsonService");
 
 const getAllUsers = async () => {
   return await userModel.find({});
@@ -12,7 +12,25 @@ const getUserById = async (id) => {
 
 const CreateUser = async (user) => {
   const newUser = new userModel(user);
-   await newUser.save();
+  await newUser.save();
+
+  await Promise.all([
+    usersJsonService.addUserFromJson({
+      id: newUser._id,
+      firstName: "",
+      lastName: "",
+      createdDate: new Date().toLocaleDateString("he-IL"), 
+      sessionTimeOut: "",
+    }),
+    permissions.addPermission({
+      id: newUser._id,
+      permissions: [
+        "View Subscriptions",
+        "view movies",
+      ],
+    }),
+  ]);
+
   return "User Created";
 };
 
@@ -24,8 +42,8 @@ const updateUser = async (id, newData) => {
 const deleteUser = async (id) => {
   await Promise.all([
     userModel.findByIdAndDelete(id),
-    deleteUserFromJson(id),
-    deletePermission(id),
+    usersJsonService.deleteUserFromJson(id),
+    permissions.deletePermission(id),
   ]);
   return "User Deleted";
 };

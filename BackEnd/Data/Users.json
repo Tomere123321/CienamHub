@@ -3,14 +3,7 @@
     "id": "671e7ad35b42df6699e5cb44",
     "firstName": "Admin",
     "lastName": "User",
-    "createdDate": "2023-01-01",
+    "createdDate": "20/1/2024",
     "sessionTimeOut": 60
-  },
-  {
-    "id": "671feae0f359a670c06366c2",
-    "firstName": "tomer123",
-    "lastName": "",
-    "createdDate": "2024-10-28T19:49:52.136Z",
-    "sessionTimeOut": null
   }
 ]

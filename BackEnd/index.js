@@ -30,6 +30,9 @@ app.use("/users", usersController);
 const permissionsController = require("./Controllers/permissionsController");
 app.use("/permissions", permissionsController);
 
+const usersJsonController = require('./Controllers/usersJsonController')
+app.use("/usersjson", usersJsonController)
+
 
 // http://localhost:8000
 app.listen(PORT, async () => {

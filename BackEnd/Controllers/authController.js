@@ -3,8 +3,7 @@ const router = express.Router();
 const userModel = require('../Models/userModel');
 const generateToken = require('../JWT/jwt'); 
 const bcrypt = require('bcrypt');
-const { addUserFromJson, deleteUserFromJson } = require('../Services/usersJsonService');  
-const { addPermission, deletePermission } = require('../Services/permissionsJsonService');  
+
 
 router.post('/login', async (req, res) => { 
     try {
@@ -52,13 +51,7 @@ router.post('/register', async (req, res) => {
 
         if (newUser) {
             const savedUser = await newUser.save();
-            
-            
-            await Promise.all([
-                addUserFromJson({ id: savedUser._id, firstName: userName, lastName: "", createdDate: new Date(), sessionTimeOut: null }),
-                addPermission({ id: savedUser._id, permissions: [] })
-            ]);
-
+          ;
             return res.status(201).json({
                 _id: savedUser._id,
                 userName: savedUser.userName,

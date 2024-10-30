@@ -4,11 +4,12 @@
     "permissions": [
       "View Subscriptions",
       "Create Subscriptions",
+      "update Subscriptions",
       "Delete Subscriptions",
       "View Movies",
       "Create Movies",
+      "update Movies",
       "Delete Movies"
     ]
-  },
-  { "id": "671feae0f359a670c06366c2", "permissions": [] }
+  }
 ]
