@@ -1,2 +1,8 @@
 # Movies_Subscriptions_Manager
- Movies & Subscriptions Manager App
+Movies & Subscription Management App
+
+
+
+
+
+
