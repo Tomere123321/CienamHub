@@ -2,12 +2,13 @@ const express = require('express');
 const router = express.Router();
 const usersJsonService = require('../Services/usersJsonService')
 // const protectRoute = require('../middleware/protectRoute');
+const adminRoute = require('../middleware/CheckAdmin');
 
 // router.use(protectRoute);
 
 router.get('/', async (req, res) => {
     try {
-        const users = await usersJsonService.getUsersFromJson()
+        const users = await usersJsonService.getUsersFromJson(req)
         return res.status(200).json(users);
 
     } catch (e) {
@@ -28,7 +29,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('/add', async (req, res) => { 
+router.post('/add', adminRoute , async (req, res) => { 
     try {
         const newData = req.body;
         const newUser = await usersJsonService.addUserFromJson(newData);
