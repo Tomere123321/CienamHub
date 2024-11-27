@@ -1,6 +1,7 @@
 const userService = require('../Services/userServices');
 const express = require('express');
 const router = express.Router();
+const adminRoute = require('../middleware/CheckAdmin');
 // const protectRoute = require('../middleware/protectRoute');
 
 // router.use(protectRoute);
@@ -32,7 +33,7 @@ router.post('/add', async (req, res) => {
     try {
         const newData = req.body;
         const newUser = await userService.CreateUser(newData);
-        return res.status(201).json({ message: newUser }); 
+        return res.status(201).json({ newUser }); 
     
     } catch (e) {
         console.log('Error in addUser:', e.message);
