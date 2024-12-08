@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userModel = require("../Models/userModel");
 const generateToken = require("../JWT/jwt");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 router.post("/login", async (req, res) => {
   try {
@@ -13,7 +13,7 @@ router.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Invalid username Or Password!" });
     }
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    // const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
       return res.status(400).json({ error: "Invalid username Or Password!" });
