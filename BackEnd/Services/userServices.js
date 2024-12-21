@@ -13,33 +13,44 @@ const getUserById = async (id) => {
 
 const CreateUser = async (user) => {
   try {
-    const newUser = new userModel(user); 
+    const jsonUsers = await usersJsonService.getAllUsersFromJson();
+
+    const existingUser = jsonUsers.find(u => u.id === user.id);
+
+    const firstName = existingUser ? existingUser.firstName : user.firstName || "";
+    const lastName = existingUser ? existingUser.lastName : user.lastName || "";
+
+    const checkPermissions = await permissions.getPermissions()
+    const existingPermissions = checkPermissions.find(p => p.id === user.id);
+
+    const userPermissions = existingPermissions
+      ? existingPermissions.permissions
+      : user.permissions || ["View Subscriptions", "View Movies"];
+
+    const newUser = new userModel({ ...user, firstName, lastName });
     await newUser.save();
 
     await Promise.all([
       usersJsonService.addUserFromJson({
-        id: newUser._id,
-        firstName:  "",
-        lastName: "",
+        id: newUser._id.toString(),
+        firstName,
+        lastName,
         createdDate: new Date().toLocaleDateString("he-IL"), 
-        sessionTimeOut: 40,
+        sessionTimeOut: user.sessionTimeOut || 40,
       }),
       permissions.addPermission({
-        id: newUser._id,
-        permissions: [
-          "View Subscriptions",
-          "View Movies",
-        ],
+        id: newUser._id.toString(),
+        permissions: userPermissions,
       }),
     ]);
 
     return "User Created Successfully";
-  
   } catch (error) {
     console.error("Error creating user:", error.message);
     throw new Error("Failed to create user. Please try again.");
   }
 };
+
 
 const updateUser = async (id, newData) => {
   await userModel.findByIdAndUpdate(id, newData, { new: true });

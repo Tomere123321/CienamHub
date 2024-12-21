@@ -2,7 +2,8 @@ const express = require("express");
 const router = express.Router();
 const userModel = require("../Models/userModel");
 const generateToken = require("../JWT/jwt");
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
+
 
 router.post("/login", async (req, res) => {
   try {
@@ -10,16 +11,16 @@ router.post("/login", async (req, res) => {
     const user = await userModel.findOne({ userName });
 
     if (!user) {
-      return res.status(400).json({ error: "Invalid username Or Password!" });
+      return res.status(400).json({ error: "Thid User Was Not Not Created By The Admin!" });
     }
 
-    // const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
       return res.status(400).json({ error: "Invalid username Or Password!" });
     }
 
-    const token = generateToken(user._id);
+    const token = await generateToken(user._id);
 
     return res.status(200).json({
       _id: user._id,

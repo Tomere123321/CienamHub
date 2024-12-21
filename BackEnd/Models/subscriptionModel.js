@@ -4,7 +4,6 @@ const subscriptionSchema = new mongoose.Schema({
   memberId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "member",
-    required: true,
   },
   movies: [
     {

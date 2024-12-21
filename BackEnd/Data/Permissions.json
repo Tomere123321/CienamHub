@@ -1,16 +1,16 @@
 [
-  {
-    "id": "6755d6243bd13a2275b10216",
-    "permissions": [
-      "View Subscriptions",
-      "Create Subscriptions",
-      "Delete Subscriptions",
-      "Update Subscriptions",
-      "view movies",
-      "Create movies",
-      "Delete movies",
-      "Update movies"
-    ]
-  }
- 
-]
+    {
+      "id": "6755d6243bd13a2275b10216",
+      "permissions": [
+        "View Subscriptions",
+        "Create Subscriptions",
+        "Delete Subscriptions",
+        "Update Subscriptions",
+        "view movies",
+        "Create movies",
+        "Delete movies",
+        "Update movies"
+      ]
+    }
+   
+  ]
