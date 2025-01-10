@@ -4,17 +4,15 @@ import { BrowserRouter} from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import {legacy_createStore} from 'redux'
-import { Provider } from 'react-redux'
-import AppReducer from './Redux/AppReducer.jsx'
-const appStore = legacy_createStore(AppReducer)
-
-
+import {Provider} from 'react-redux'
+const appstore = legacy_createStore(AppReducer)
+import AppReducer from "./Redux/AppReducer.jsx";
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Provider store={appStore}>
+    <Provider store={appstore}>
       <App />
-      </Provider>
+    </Provider>
     </BrowserRouter>
   </StrictMode>,
 )

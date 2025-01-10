@@ -3,7 +3,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
-
 const Login = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -43,15 +42,19 @@ const Login = () => {
         toast.error(data.error);
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("userName", data.userName);
+      sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("userName", data.userName);
+      if (data.sessionTimeOut) {
+        sessionStorage.setItem("sessionTimeOut", data.sessionTimeOut);
+      } else {
+        console.error("Session Timeout is missing");
+      }
+
       navigate("/");
-    
     } catch (e) {
       if (e.response && e.response.data && e.response.data.error) {
         toast.error(e.response.data.error);
-     
-    } else {
+      } else {
         toast.error(e.message);
       }
     }

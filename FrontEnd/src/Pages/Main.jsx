@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import { IoIosLogOut } from "react-icons/io";
 import UseLogOut from "../Components/UseLogOut";
 import { Outlet, Link } from "react-router-dom";
-// import CheckAdmin from "";
+
 const Main = () => {
   const [activeTab, setActiveTab] = useState("Movies");
   const [userName, setUserName] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const logOut = UseLogOut();
 
-  // const isAdmin = CheckAdmin;
-
   useEffect(() => {
-    const userName = localStorage.getItem("userName");
+    const userName = sessionStorage.getItem("userName");
+     sessionStorage.getItem("token" );
+     sessionStorage.getItem("sessionTimeOut");
+
 
 
     setUserName(userName);

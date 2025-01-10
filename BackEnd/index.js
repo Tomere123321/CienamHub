@@ -12,26 +12,24 @@ app.use(express.json());
 app.use(cors());
 
 
-const authController = require("./Controllers/authController");
-app.use("/auth", authController);
+// const authController = require("./Controllers/authController");
+// app.use("/auth", authController);
 
-const membersController = require("./Controllers/membersController");
-app.use("/members", membersController);
+// const membersController = require("./Controllers/membersController");
+// app.use("/members", membersController);
 
-const moviesController = require("./Controllers//movieController");
-app.use("/movies", moviesController);
+// const moviesController = require("./Controllers//movieController");
+// app.use("/movies", moviesController);
 
-const subscriptionsController = require("./Controllers/subscriptionController");
-app.use("/subscriptions", subscriptionsController);
+// const subscriptionsController = require("./Controllers/subscriptionController");
+// app.use("/subscriptions", subscriptionsController);
 
 const usersController = require("./Controllers/usersControllers");
 app.use("/users", usersController);
 
-const permissionsController = require("./Controllers/permissionsController");
-app.use("/permissions", permissionsController);
+// const permissionsController = require("./Controllers/permissionsController");
+// app.use("/permissions", permissionsController);
 
-const usersJsonController = require('./Controllers/usersJsonController')
-app.use("/usersjson", usersJsonController)
 
 
 // http://localhost:8000

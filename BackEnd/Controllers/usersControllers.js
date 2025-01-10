@@ -1,8 +1,7 @@
 const userService = require('../Services/userServices');
 const express = require('express');
 const router = express.Router();
-const adminRoute = require('../middleware/CheckAdmin');
-// const protectRoute = require('../middleware/protectRoute');
+const protectRoute = require('../middleware/protectRoute');
 
 // router.use(protectRoute);
 

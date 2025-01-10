@@ -1,81 +1,102 @@
 const express = require("express");
+const bcrypt = require("bcrypt");
 const router = express.Router();
 const userModel = require("../Models/userModel");
-const generateToken = require("../JWT/jwt");
-const bcrypt = require("bcrypt");
+// const usersJson = require("../Services/usersJsonService");
+// const generateToken = require("../JWT/jwt");
 
+// router.post("/login", async (req, res) => {
+//   try {
+//     const { userName, password } = req.body;
 
-router.post("/login", async (req, res) => {
-  try {
-    const { userName, password } = req.body;
-    const user = await userModel.findOne({ userName });
+//     if (!userName || !password) {
+//       return res
+//         .status(400)
+//         .json({ error: "Username and password are required!" });
+//     }
 
-    if (!user) {
-      return res.status(400).json({ error: "Thid User Was Not Not Created By The Admin!" });
-    }
+//     const user = await userModel.findOne({ userName });
 
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+//     if (!user) {
+//       return res
+//         .status(400)
+//         .json({ error: "Invalid Details" });
+//     }
 
-    if (!isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid username Or Password!" });
-    }
+//     const userJson = usersJson.getUserByIdFromJson(user.id.toString());
+//     if (!userJson) {
+//       return res.status(400).json({ error: "failed to find user details!" });
+//     }
 
-    const token = await generateToken(user._id);
+//     const token = await generateToken(user._id);
 
-    return res.status(200).json({
-      _id: user._id,
-      userName: user.userName,
-      token: token,
-    });
-  } catch (error) {
-    console.error("Error in login Controller:", error.message);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     return res.status(200).json({
+//       _id: user._id,
+//       userName: user.userName,
+//       token: token,
+//       sessionTimeOut: userJson.sessionTimeOut,
+//     });
+//   } catch (error) {
+//     console.error("Error in login Controller:", error.message);
+//     return res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
-router.post("/register", async (req, res) => {
-  const { userName, password } = req.body;
+// router.post("/register", async (req, res) => {
+//   const { userName, password } = req.body;
 
-  try {
-  const user = await userModel.findOne({ userName });
+//   try {
+//     if (!userName || !password) {
+//       return res
+//         .status(400)
+//         .json({ error: "Username and password are required!" });
+//     }
 
-    if (!user) {
-      return res
-        .status(404)
-        .json({ error: "User does not exist. Please contact the admin." });
-    }
+//     let user = await userModel.findOne({ userName });
 
-   
-    if (user.password) {
-      return res
-        .status(400)
-        .json({ error: "User already has a password. Please log in." });
-    }
+//     if (!user) {
+//       const hashedPassword = await bcrypt.hash(password, 10);
+//       user = new userModel({
+//         userName,
+//         password: hashedPassword,
+//       });
+//       await user.save();
 
-    const salt = await bcrypt.genSalt(10);
-    const securePassword = await bcrypt.hash(password, salt);
+//       return res.status(201).json({
+//         message: "User created successfully. Please log in.",
+//         _id: user._id,
+//         userName: user.userName,
+//       });
+//     }
 
-    user.password = securePassword; 
-    await user.save();
+//     if (user.password) {
+//       return res
+//         .status(400)
+//         .json({ error: "User already has a password. Please log in." });
+//     }
 
-    return res.status(200).json({
-      message: "Password set successfully. Please log in.",
-      _id: user._id,
-      userName: user.userName,
-    });
-  } catch (error) {
-    console.error("Error in register Controller:", error.message);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     const hashedPassword = await bcrypt.hash(password, 10);
+//     user.password = hashedPassword;
+//     await user.save();
 
-router.post("/logout", async (req, res) => {
-  try {
-    return res.status(200).json({ message: "Logged out successfully" });
-  } catch (error) {
-    console.error("Error in logout Controller:", error.message);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
+//     return res.status(200).json({
+//       message: "Password set successfully. Please log in.",
+//       _id: user._id,
+//       userName: user.userName,
+//     });
+//   } catch (error) {
+//     console.error("Error in register Controller:", error.message);
+//     return res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
 
-module.exports = router;
+// router.post("/logout", async (req, res) => {
+//   try {
+//     return res.status(200).json({ message: "Logged out successfully" });
+//   } catch (error) {
+//     console.error("Error in logout Controller:", error.message);
+//     return res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+// module.exports = router;

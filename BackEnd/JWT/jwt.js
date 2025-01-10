@@ -1,21 +1,22 @@
 const jwt = require("jsonwebtoken");
-const usersJsonService = require("../Services/usersJsonService");
+// const usersJsonService = require("../Services/usersJsonService");
 
-let secretKey = "secretKey";
+const secretKey = "secretKey";
 
-const generateToken = async (userId) => {
-  try {
-    const user = await usersJsonService.getUserByIdFromJson(userId);
-    if (!user) {
-      throw new Error("User not found");
-    }
-    const sessionTimeOutInMinutes = user.sessionTimeOut;
+// const generateToken = (userId) => {
+//   try {
+//     const user = usersJsonService.getUserByIdFromJson(userId);
+//     if (!user) {
+//       throw new Error("User not found");
+//     }
 
-    return jwt.sign({ userId }, secretKey, { expiresIn: `${sessionTimeOutInMinutes}m` });
-  } catch (error) {
-    console.error("Error generating token:", error.message);
-    throw new Error("Failed to generate token. Please try again.");
-  }
-};
+//     const expiresIn = `${user.sessionTimeOut || 40}m`; 
+
+//     return jwt.sign({ userId }, secretKey, { expiresIn });
+//   } catch (error) {
+//     console.error("Error generating token:", error.message);
+//     throw new Error("Failed to generate token");
+//   }
+// };
 
 module.exports = generateToken;

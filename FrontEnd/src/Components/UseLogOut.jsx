@@ -17,9 +17,9 @@ const UseLogOut = () => {
       }
 
       toast.success("Logged out successfully");
+      navigate("/login");
       localStorage.removeItem("token");
       localStorage.removeItem("userName");
-      navigate("/login");
     } catch (e) {
       toast.error(e.message || "Logout failed");
     }

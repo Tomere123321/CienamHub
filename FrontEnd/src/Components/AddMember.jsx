@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+
 import axios from 'axios'
 
 const AddMember = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [memberData, setMemberData] = useState({
-        name: String,
-        email: String,
-        city: String
+        name: '',
+        email: '',
+        city: ''
     });
     const handleSubmit = async (event) => {
         const response = await axios.post('http://localhost:8000/members', memberData)
