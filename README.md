@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to Movies And Subscriptions Management 👋</h1>
+<h1 align="center">Welcome to CinemaHub 👋</h1>
 <p>
 </p>
 
