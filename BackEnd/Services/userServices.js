@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const userModel = require("../Models/userModel");
+const permissionService = require("./permissionsService");
 
 const getAllUsers = async () => {
   return await userModel.find({});
@@ -15,22 +16,33 @@ const CreateUser = async (user) => {
   const newUser = new userModel(user);
   await newUser.save();
 
+  const defaultPermission = ["View Movies", "View Subscriptions"];
+  const permission = {
+    userId: newUser._id,
+    permissions: defaultPermission,
+  };
+  await permissionService.CreatePermission(permission);
   return "User Created";
 };
 
 const updateUser = async (id, newData) => {
   await userModel.findByIdAndUpdate(id, newData, { new: true });
+  if (newData.permissions) {
+    const permissionUpdate = {
+      permissions: newData.permissions,
+    };
+    await permissionService.updatePermission(id, permissionUpdate);
+  }
   return "User Updated";
 };
 
 const deleteUser = async (id) => {
   await userModel.findByIdAndDelete(id);
-  return "User Deleted";
+  await permissionService.deletePermission(id);
+  return "User & Permissions Was Deleted";
 };
 
-// const getUserByUserName = async (userName) => {
-//   return await userModel.findOne({ userName });
-// };
+
 
 module.exports = {
   getAllUsers,
@@ -38,5 +50,4 @@ module.exports = {
   CreateUser,
   updateUser,
   deleteUser,
-  // getUserByUserName,
 };

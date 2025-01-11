@@ -27,8 +27,8 @@ app.use(cors());
 const usersController = require("./Controllers/usersControllers");
 app.use("/users", usersController);
 
-// const permissionsController = require("./Controllers/permissionsController");
-// app.use("/permissions", permissionsController);
+const permissionsController = require("./Controllers/permissionsController");
+app.use("/permissions", permissionsController);
 
 
 

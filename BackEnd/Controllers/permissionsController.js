@@ -1,13 +1,13 @@
-const permissionService = require('../Services/permissionsJsonService');
+const permissionService = require('../Services/permissionsService');
 const express = require('express');
 const router = express.Router();
-const protectRoute = require('../middleware/protectRoute');
+// const protectRoute = require('../middleware/protectRoute');
 
 // router.use(protectRoute);
 
 router.get('/', async (req, res) => {
     try {
-        const permission = await permissionService.getPermissions();
+        const permission = await permissionService.getAllPermissions();
         return res.status(200).json(permission);
     } catch (e) {
         console.log('Error in permission Service:', e.message);
@@ -18,7 +18,7 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => { 
     try {
         const { id } = req.params;
-        const permissionId = await permissionService.getById(id);
+        const permissionId = await permissionService.getPermissionById(id);
         return res.status(200).json(permissionId);
     } catch (e) {
         console.log('Error in get permission Id:', e.message);
@@ -29,7 +29,7 @@ router.get('/:id', async (req, res) => {
 router.post('/add', async (req, res) => { 
     try {
         const newData = req.body;
-        const permission = await permissionService.addPermission(newData); 
+        const permission = await permissionService.CreatePermission(newData); 
         return res.status(201).json({ permission });
     } catch (e) {
         console.log('Error in Add Permission:', e.message);
