@@ -42,8 +42,6 @@ const deleteUser = async (id) => {
   return "User & Permissions Was Deleted";
 };
 
-
-
 module.exports = {
   getAllUsers,
   getUserById,

@@ -12,8 +12,8 @@ app.use(express.json());
 app.use(cors());
 
 
-// const authController = require("./Controllers/authController");
-// app.use("/auth", authController);
+const authController = require("./Controllers/authController");
+app.use("/auth", authController);
 
 // const membersController = require("./Controllers/membersController");
 // app.use("/members", membersController);
