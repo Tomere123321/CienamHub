@@ -1,9 +1,6 @@
 const movieService = require('../Services/movieService');
 const express = require('express');
 const router = express.Router();
-const protectRoute = require('../middleware/protectRoute');
-
-// router.use(protectRoute);
 
 router.get('/', async (req, res) => {
     try {

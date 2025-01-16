@@ -1,9 +1,7 @@
 const permissionService = require('../Services/permissionsService');
 const express = require('express');
 const router = express.Router();
-// const protectRoute = require('../middleware/protectRoute');
 
-// router.use(protectRoute);
 
 router.get('/', async (req, res) => {
     try {

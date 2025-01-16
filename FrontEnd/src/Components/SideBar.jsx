@@ -1,27 +1,39 @@
 import React, { useEffect, useState } from "react";
-import { MdLocalMovies, MdOutlineSubscriptions, MdPerson, MdLogout,} from "react-icons/md";
+import {
+  MdLocalMovies,
+  MdOutlineSubscriptions,
+  MdPerson,
+  MdLogout,
+} from "react-icons/md";
 import logo from "../assets/logo.png";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet, Link } from "react-router-dom";
 
 const Sidebar = () => {
   const [activeTab, setActiveTab] = useState("Control Panel");
   const [isAdmin, setIsAdmin] = useState(false);
-  const [userName, setUserName] = useState('')
+  const [userName, setUserName] = useState("");
   const navigate = useNavigate();
 
   const menuItems = [
-    { id: "Control Panel", label: "Control panel", icon: "🛠️" },
+    {
+      id: "Control Panel",
+      label: "Control panel",
+      icon: "🛠️",
+      path: "/ControlPanel",
+    },
     {
       id: "Movies",
       label: "Movies",
       icon: <MdLocalMovies className="text-lg" />,
+      path: "/movies",
     },
     {
       id: "Subscriptions",
       label: "Subscriptions",
       icon: <MdOutlineSubscriptions className="text-lg" />,
+      path: "/subscriptions",
     },
   ];
 
@@ -30,6 +42,7 @@ const Sidebar = () => {
       id: "User Management",
       label: "User Management",
       icon: <MdPerson className="text-lg" />,
+      path: "/usersmanagement",
     });
   }
 
@@ -40,14 +53,14 @@ const Sidebar = () => {
         const getUserName = localStorage.getItem("userName");
 
         if (getUserName) {
-          setUserName(getUserName);  
+          setUserName(getUserName);
         }
 
         if (!token) {
           toast.error("You are not logged in!");
-          navigate("/");
+          navigate("/login");
         }
-       
+
         const response = await axios.get("http://localhost:8000/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -74,11 +87,9 @@ const Sidebar = () => {
     try {
       const response = await axios.post("http://localhost:8000/auth/logout");
       if (response.status === 200) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("sessionTimeOut");
-        localStorage.removeItem("userName");
+        localStorage.clear();
         toast.success("Logged out successfully");
-        navigate("/");
+        navigate("/login");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to logout");
@@ -90,7 +101,9 @@ const Sidebar = () => {
       <div className="w-64 bg-gray-100 text-gray-700 flex flex-col py-6 px-4">
         <div className="flex flex-col items-center mb-8">
           <span className="text-lg font-semibold mb-2">CINEMAHUB</span>
-          <img src={logo} alt="Logo" className="w-27 h-30" />
+          <Link to="/">
+            <img src={logo} alt="Logo" className="w-27 h-30" />
+          </Link>
           <span>{`Hello, ${userName}!`}</span>
         </div>
 
@@ -98,7 +111,10 @@ const Sidebar = () => {
         {menuItems.map((item) => (
           <button
             key={item.id}
-            onClick={() => setActiveTab(item.id)}
+            onClick={() => {
+              setActiveTab(item.id);
+              navigate(item.path);
+            }}
             className={`flex items-center mb-3 px-4 py-2 rounded-md ${
               activeTab === item.id
                 ? "bg-purple-100 text-purple-600"
@@ -120,6 +136,9 @@ const Sidebar = () => {
           </button>
           <p>v1.0.0</p>
         </div>
+      </div>
+      <div className="flex-1">
+        <Outlet />
       </div>
     </div>
   );

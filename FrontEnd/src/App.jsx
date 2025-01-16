@@ -1,19 +1,31 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
 import Login from "./Pages/Login";
-import SignUp from "./Pages/SignUp";
 import ControlPanel from "./Pages/ControlPanel";
+import Subscriptions from "./Pages/Subscriptions";
+import Usersmanagement from "./Pages/Usersmanagement";
+import Movies from "./Pages/Movies";
+import Sidebar from "./Components/SideBar";
+import MovieDetails from "./Components/MovieDetails";
 
-export const App = () => {
-  return <div>
-    <Routes>
-    <Route path="/" element={<Login />} />
-    <Route path="/signUp" element={<SignUp />} />
-    <Route path="/ControlPanel" element={<ControlPanel />} />
-   </Routes>
-   <Toaster/>
-  </div>;
+const App = () => {
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<Sidebar />}>
+          <Route index element={<Navigate to="/controlpanel" />} /> 
+          <Route path="controlpanel" element={<ControlPanel />} />
+          <Route path="movies" element={<Movies />} />
+          <Route path="movies/:id" element={<MovieDetails />} />
+          <Route path="subscriptions" element={<Subscriptions />} />
+          <Route path="usersManagement" element={<Usersmanagement />} />
+        </Route>
+        <Route path="/login" element={<Login />} />
+      </Routes>
+      <Toaster />
+    </div>
+  );
 };
 
 export default App;
