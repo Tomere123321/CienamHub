@@ -14,15 +14,28 @@ const getUserById = async (id) => {
 const CreateUser = async (user) => {
   user.password = await bcrypt.hash(user.password, 10);
   const newUser = new userModel(user);
+
   await newUser.save();
 
-  const defaultPermission = ["View Movies", "View Subscriptions"];
+  let permissions = ["View Movies", "View Subscriptions"];
+  if (newUser.isAdmin) {
+    permissions = [
+      "Create Movies",
+      "Update Movies",
+      "Delete Movies",
+      "Create Subscriptions",
+      "Update Subscriptions",
+      "Delete Subscriptions",
+    ];
+  }
   const permission = {
     userId: newUser._id,
-    permissions: defaultPermission,
+    permissions: permissions,
   };
+
   await permissionService.CreatePermission(permission);
-  return "User Created";
+
+  return "User & Permissions Was Created";
 };
 
 const updateUser = async (id, newData) => {
@@ -33,7 +46,7 @@ const updateUser = async (id, newData) => {
     };
     await permissionService.updatePermission(id, permissionUpdate);
   }
-  return "User Updated";
+  return "User & Permissions Was Updated";
 };
 
 const deleteUser = async (id) => {

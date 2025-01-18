@@ -1,11 +1,11 @@
 const subscriptionModel = require("../Models/subscriptionModel");
 
 const subscription = async () => {
-    return await subscriptionModel.find({});
+    return await subscriptionModel.find({}).populate('memberId').populate('movies.movieId');
 }
 
 const getSubscriptionById = async (id) => {
-    return await subscriptionModel.findById(id);
+    return await subscriptionModel.findById(id).populate('memberId').populate('movies.movieId');
 }
 
 const addSubscription = async (member) => {

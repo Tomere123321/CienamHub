@@ -39,8 +39,8 @@ const Sidebar = () => {
 
   if (isAdmin) {
     menuItems.push({
-      id: "User Management",
-      label: "User Management",
+      id: "Users Management",
+      label: "Users Management",
       icon: <MdPerson className="text-lg" />,
       path: "/usersmanagement",
     });

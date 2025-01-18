@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import Movies from "../Pages/movies";
 
 const AddMovie = ({ closeModal }) => {
   const [newMovie, setnewMovie] = useState({
@@ -34,16 +33,19 @@ const AddMovie = ({ closeModal }) => {
         "http://localhost:8000/movies/add",
         newMovie
       );
-      toast.success(data.message);
-      setnewMovie({
-        name: "",
-        image: "",
-        rating: "",
-        premiered: "",
-        genres: [],
-        language: "English",
-      });
-      closeModal();
+      if (newMovie) {
+        toast.success(data.message);
+        setnewMovie({
+          name: "",
+          image: "",
+          rating: "",
+          premiered: "",
+          genres: [],
+          language: "English",
+        });
+        closeModal();
+      }
+     
 
     } catch (error) {
       toast.error("Failed to add movie");
