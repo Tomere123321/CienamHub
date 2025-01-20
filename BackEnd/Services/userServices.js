@@ -17,28 +17,31 @@ const CreateUser = async (user) => {
 
   await newUser.save();
 
-  let permissions = ["View Movies", "View Subscriptions"];
-  if (newUser.isAdmin) {
-    permissions = [
+  const permissions = newUser.isAdmin
+  ? [
       "Create Movies",
       "Update Movies",
       "Delete Movies",
       "Create Subscriptions",
       "Update Subscriptions",
       "Delete Subscriptions",
-    ];
-  }
-  const permission = {
-    userId: newUser._id,
-    permissions: permissions,
-  };
+    ]
+  : ["View Movies", "View Subscriptions"];
+
+const permission = {
+  userId: newUser._id,
+  permissions,
+};
+
 
   await permissionService.CreatePermission(permission);
-
   return "User & Permissions Was Created";
 };
 
 const updateUser = async (id, newData) => {
+  if (newData.password) {
+    newData.password = await bcrypt.hash(newData.password, 10);
+  }
   await userModel.findByIdAndUpdate(id, newData, { new: true });
   if (newData.permissions) {
     const permissionUpdate = {

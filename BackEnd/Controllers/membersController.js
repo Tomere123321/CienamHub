@@ -2,7 +2,6 @@ const memberService = require('../Services/memberService');
 const express = require('express');
 const router = express.Router();
 
-
 router.get('/', async (req, res) => {
     try {
         const members = await memberService.getMembers();
@@ -26,7 +25,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-router.post('add/', async (req, res) => { 
+router.post('/add', async (req, res) => { 
     try {
         const newData = req.body;
         const newMember = await memberService.addMember(newData); 

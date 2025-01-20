@@ -2,7 +2,6 @@ const permissionService = require('../Services/permissionsService');
 const express = require('express');
 const router = express.Router();
 
-
 router.get('/', async (req, res) => {
     try {
         const permission = await permissionService.getAllPermissions();

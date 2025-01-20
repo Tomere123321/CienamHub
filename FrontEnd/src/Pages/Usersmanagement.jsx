@@ -3,15 +3,23 @@ import toast from "react-hot-toast";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import axios from "axios";
 import validateSession from "../Components/ValidateSession";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AddUser from "../Components/AddUser";
+import { CiEdit } from "react-icons/ci";
+import { MdDelete } from "react-icons/md";
+import EditUsers from "../Components/EditUsers";
+import DeleteUsers from "../Components/DeleteUsers";
+import { MdAdminPanelSettings } from "react-icons/md";
 
 const Usersmanagement = () => {
   const [users, setUsers] = useState([]);
   const [permissions, setPermissions] = useState([]);
   const [search, setSearch] = useState("");
   const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [isEditUserOpen, SetisEditUserOpen] = useState(null);
+  const [isDeleteUserOpen, SetisDeleteUserOpen] = useState(null);
   const navigate = useNavigate();
+  const { id } = useParams();
   
   useEffect(() => {
     const getUsers = async () => {
@@ -87,12 +95,11 @@ const Usersmanagement = () => {
 
   const getDate = (createdAt) => {
     const date = new Date(createdAt);
-    const day = date.getDate().toString().padStart(2, '0'); 
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); 
-    const year = date.getFullYear(); 
-    return `${day}/${month}/${year}`; 
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
   };
-  
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -128,7 +135,7 @@ const Usersmanagement = () => {
           </button>
         </div>
       </div>
-  
+
       <div className="overflow-x-auto mt-6 max-h-[500px] overflow-y-auto">
         {users.length > 0 ? (
           <table className="table table-zebra w-full">
@@ -142,6 +149,7 @@ const Usersmanagement = () => {
                 <th>Session Time Out (Minutes)</th>
                 <th>is Admin</th>
                 <th>Permissions</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -168,6 +176,34 @@ const Usersmanagement = () => {
                       ))}
                     </div>
                   </td>
+                  <td>
+                    <div className="flex items-center gap-2">
+                      <button
+                        className="bg-blue-500 text-white hover:bg-blue-600 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
+                        onClick={() => {
+                          SetisEditUserOpen(true);
+                          navigate(`/usersManagement/${user._id}`);
+                        }}
+                        title={`Edit ${user.userName}`}
+                      >
+                        <CiEdit className="h-5 w-5" />
+                      </button>
+                      <button
+                        className="bg-green-500 text-white hover:bg-green-600 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
+                        onClick={() => navigate(`/usersManagement/permissions/${user._id}`)}
+                        title={`Edit ${user.userName} Permissions`}
+                      >
+                        <MdAdminPanelSettings className="h-5 w-5" />
+                      </button>
+                      <button
+                        className="bg-red-500 text-white hover:bg-red-600 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
+                        onClick={() => navigate(`/usersManagement/${user._id}`)}
+                        title={`Delete ${user.userName}`}
+                      >
+                        <MdDelete className="h-5 w-5" />
+                      </button>{" "}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -178,11 +214,34 @@ const Usersmanagement = () => {
           </div>
         )}
       </div>
-  
+
       {isAddUserOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
             <AddUser closeModal={() => setIsAddUserOpen(false)} />
+          </div>
+        </div>
+      )}
+      {isEditUserOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <EditUsers
+              user={{
+                ...isEditUserOpen,
+                permissions: getUserPermissions(isEditUserOpen._id),
+              }}
+              closeModal={() => SetisEditUserOpen(null)}
+            />
+          </div>
+        </div>
+      )}
+      {isDeleteUserOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <DeleteUsers
+              user={isDeleteUserOpen}
+              closeModal={() => SetisDeleteUserOpen(null)}
+            />
           </div>
         </div>
       )}

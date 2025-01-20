@@ -18,7 +18,7 @@ app.use("/auth", authController);
 const membersController = require("./Controllers/membersController");
 app.use("/members", membersController);
 
-const moviesController = require("./Controllers//movieController");
+const moviesController = require("./Controllers/movieController");
 app.use("/movies", moviesController);
 
 const subscriptionsController = require("./Controllers/subscriptionController");

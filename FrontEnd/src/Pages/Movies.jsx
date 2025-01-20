@@ -8,6 +8,7 @@ import { toast } from "react-hot-toast";
 import AddMovie from "../Components/AddMovie";
 import { Link, useNavigate } from "react-router-dom";
 import validateSession from "../Components/ValidateSession";
+import { FaCirclePlus } from "react-icons/fa6";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
@@ -136,6 +137,15 @@ const Movies = () => {
                     <span className="text-sm">{movie.rating}</span>
                   </div>
                 </Link>
+                <div className="mt-4 flex justify-center">
+                  <button
+                    className="text-blue-500 hover:text-blue-700  bg-transparent"
+                    onClick={() => navigate(`/movies/${movie._id}`)}
+                    title={`Edit ${movie.name}`}
+                  >
+                    <FaCirclePlus className="h-7 w-7" />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

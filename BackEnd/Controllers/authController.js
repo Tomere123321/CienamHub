@@ -4,6 +4,7 @@ const router = express.Router();
 const userModel = require("../Models/userModel");
 const generateToken = require("../JWT/jwt");
 
+
 router.post("/login", async (req, res) => {
   try {
     const { userName, password } = req.body;

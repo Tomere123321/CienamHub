@@ -76,7 +76,6 @@ const MovieDetails = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(updateMovie);
 
     const { name, image, rating, premiered, language, genres } = updateMovie;
 

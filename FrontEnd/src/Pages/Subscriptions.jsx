@@ -2,17 +2,24 @@ import React, { useState, useEffect } from "react";
 import { FiPlus, FiSearch } from "react-icons/fi";
 import axios from "axios";
 import toast from "react-hot-toast";
-import AddSubscription from "../Components/AddSubscription";
 import validateSession from "../Components/ValidateSession";
 import { useNavigate } from "react-router-dom";
+import { CiEdit } from "react-icons/ci";
+import AddMember from "../Components/AddMember";
+import EditMember from "../Components/EditMember";
+import { MdDelete } from "react-icons/md";
+import DeleteMember from "../Components/DeleteMember";
+import { MdOutlineSubscriptions } from "react-icons/md";
 
 const Subscriptions = () => {
   const [members, setMembers] = useState([]);
   const [subscriptions, setSubscriptions] = useState([]);
   const [allMembers, setAllMembers] = useState([]);
   const [search, setSearch] = useState("");
-  const [isAddsubOpen, setIsAddsubOpen] = useState(false);
-  const navigate = useNavigate()
+  const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+  const [editingMember, setEditingMember] = useState(null);
+  const [deletingMember, setDeletingMember] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getMembers = async () => {
@@ -33,6 +40,7 @@ const Subscriptions = () => {
         toast.error("Failed to fetch subscriptions");
       }
     };
+
     getMembers();
     getSubscriptions();
 
@@ -80,9 +88,9 @@ const Subscriptions = () => {
         <div className="flex items-center gap-3">
           <button
             className="btn btn-primary flex items-center gap-2"
-            onClick={() => setIsAddsubOpen(true)}
+            onClick={() => setIsAddMemberOpen(true)}
           >
-            <FiPlus /> Add Subscriptions
+            <FiPlus /> Add Members
           </button>
           <div className="form-control flex items-center relative">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
@@ -113,6 +121,7 @@ const Subscriptions = () => {
                 <th>Email</th>
                 <th>City</th>
                 <th>Subscriptions Amount</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -128,6 +137,31 @@ const Subscriptions = () => {
                     <td>{member.email}</td>
                     <td>{member.city}</td>
                     <td>{subscriptionCount || 0}</td>
+                    <td>
+                      <div className="flex items-center space-x-2">
+                        <button
+                          className="bg-blue-500 text-white hover:bg-blue-600 hover:text-black-500 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
+                          onClick={() => setEditingMember(member)}
+                          title={`Edit ${member.name}`}
+                        >
+                          <CiEdit className="h-5 w-5" />
+                        </button>
+                        <button
+                          className="bg-red-500 text-white hover:bg-red-600 hover:text-black-300 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
+                          onClick={() => setDeletingMember(member)}
+                          title={`Delete ${member.name}`}
+                        >
+                          <MdDelete className="h-5 w-5" />
+                        </button>
+                        <button
+                          className="bg-green-500 text-white hover:bg-green-600 hover:text-black-700 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
+                          onClick={() => navigate(`/subscriptions/${member._id}`)}
+                          title={`View ${member.name} Subscriptions`}
+                        >
+                          <MdOutlineSubscriptions className="h-5 w-5" />
+                        </button>
+                      </div>
+                    </td>
                   </tr>
                 );
               })}
@@ -140,10 +174,30 @@ const Subscriptions = () => {
         )}
       </div>
 
-      {isAddsubOpen && (
+      {isAddMemberOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <AddSubscription closeModal={() => setIsAddsubOpen(false)} />
+            <AddMember closeModal={() => setIsAddMemberOpen(false)} />
+          </div>
+        </div>
+      )}
+      {editingMember && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <EditMember
+              member={editingMember}
+              closeModal={() => setEditingMember(null)}
+            />
+          </div>
+        </div>
+      )}
+      {deletingMember && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <DeleteMember
+              member={deletingMember}
+              closeModal={() => setDeletingMember(null)}
+            />
           </div>
         </div>
       )}
