@@ -5,7 +5,7 @@ Cinema Management System - A management system designed for cinemas or private t
 ---
 
 ## 🖼️ Screenshot
-![Screenshot of the Project](src/assets/ProjectScreenShot.png)
+!(src/assets/ProjectScreenShot.png)
 
 ---
 
@@ -100,8 +100,8 @@ This Cinema Management System is a **full-stack web application** designed to ma
 ---
 
 ## 🙌 Author
-- **Your Name**: [GitHub Profile](https://github.com/Tomere123321)
-- **LinkedIn**: [LinkedIn Profile]([https://linkedin.com/in/your-profile](https://www.linkedin.com/in/tomer-eliyahu-b15670291/))
+ - [GitHub Profile](https://github.com/Tomere123321)
+- [LinkedIn Profile](https://www.linkedin.com/in/tomer-eliyahu-b15670291/)
 
 ---
 
