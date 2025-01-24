@@ -9,15 +9,22 @@ import AddMovie from "../Components/AddMovie";
 import { Link, useNavigate } from "react-router-dom";
 import validateSession from "../Components/ValidateSession";
 import { FaCirclePlus } from "react-icons/fa6";
+import {validatePermission} from "../Components/ValidatePermission";
 
 const Movies = () => {
   const [movies, setMovies] = useState([]);
   const [allmovies, setAllMovies] = useState([]);
   const [search, setSearch] = useState("");
   const [isAddMovieOpen, setIsAddMovieOpen] = useState(false);
+  const [permissions, setPermissions] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+   const getPermissions = async () => { 
+    const userPermissions = await validatePermission(navigate);
+    setPermissions(userPermissions);
+   }
+    
     const fetchMovies = async () => {
       try {
         const { data } = await axios.get("http://localhost:8000/movies");
@@ -27,7 +34,10 @@ const Movies = () => {
         toast.error("Failed to fetch movies");
       }
     };
+
     fetchMovies();
+    getPermissions();
+
     const interval = setInterval(() => {
       validateSession(navigate);
     }, 5000);
@@ -35,7 +45,9 @@ const Movies = () => {
     return () => clearInterval(interval);
   }, [navigate]);
 
-  const searchMovies = async () => {
+  const hasPermission = (permission) => permissions.includes(permission);
+
+  const searchMovies = () => {
     try {
       const filteredMovies = allmovies.filter((movie) =>
         movie.name.toLowerCase().includes(search.toLowerCase())
@@ -62,6 +74,7 @@ const Movies = () => {
     }
   };
 
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <div className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md">
@@ -71,12 +84,14 @@ const Movies = () => {
         </h1>
 
         <div className="flex items-center gap-3">
-          <button
-            className="btn btn-primary flex items-center gap-2"
-            onClick={() => setIsAddMovieOpen(true)}
-          >
-            <FiPlus /> Add Movie
-          </button>
+          {hasPermission("Create Movies") && (
+            <button
+              className="btn btn-primary flex items-center gap-2"
+              onClick={() => setIsAddMovieOpen(true)}
+            >
+              <FiPlus /> Add Movie
+            </button>
+          )}
 
           <div className="form-control flex items-center relative">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
@@ -138,13 +153,15 @@ const Movies = () => {
                   </div>
                 </Link>
                 <div className="mt-4 flex justify-center">
-                  <button
-                    className="text-blue-500 hover:text-blue-700  bg-transparent"
-                    onClick={() => navigate(`/movies/${movie._id}`)}
-                    title={`Edit ${movie.name}`}
-                  >
-                    <FaCirclePlus className="h-7 w-7" />
-                  </button>
+                  {hasPermission("Update Movies") && (
+                    <button
+                      className="text-blue-500 hover:text-blue-700 bg-transparent"
+                      onClick={() => navigate(`/movies/${movie._id}`)}
+                      title={`Edit ${movie.name}`}
+                    >
+                      <FaCirclePlus className="h-7 w-7" />
+                    </button>
+                  )}
                 </div>
               </div>
             ))}

@@ -4,13 +4,47 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import axios from "axios";
 import validateSession from "../Components/ValidateSession";
+import MoviesStats from "../Components/MoviesStats";
 
 const ControlPanel = () => {
   const navigate = useNavigate();
   const [showWarning, setShowWarning] = useState(false);
   const [timeLeft, setTimeLeft] = useState(null);
+  const [userPermission, setUserPermission] = useState([]);
 
   useEffect(() => {
+    const getUserPermissions = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+          toast.error("User not found");
+          navigate("/login");
+          return;
+        }
+
+        const { data } = await axios.get(`http://localhost:8000/permissions`);
+        const matchPermissions = data.find(
+          (permission) => permission.userId === userId
+        );
+
+        if (!matchPermissions) {
+          toast.error("Permission not found");
+          navigate("/login");
+          return;
+        }
+
+        setUserPermission(matchPermissions.permissions);
+        localStorage.setItem(
+          "userPermission",
+          JSON.stringify(matchPermissions.permissions)
+        );
+      } catch (error) {
+        toast.error("Failed to Get Permissions");
+      }
+    };
+
+    getUserPermissions();
+
     const interval = setInterval(() => {
       validateSession(navigate, setTimeLeft, setShowWarning);
     }, 5000);
@@ -38,8 +72,14 @@ const ControlPanel = () => {
 
   return (
     <div className="flex flex-col bg-gray-100 min-h-screen">
-      <div className="w-full p-6 bg-white">
-        <Stats />
+      <div className="w-full p-6 bg-white flex flex-col lg:flex-row gap-6">
+        <div className="flex-1">
+          <Stats />
+        </div>
+
+        <div className="flex-1 lg:max-w-md">
+          <MoviesStats />
+        </div>
       </div>
 
       {showWarning && (

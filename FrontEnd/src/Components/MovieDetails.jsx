@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import {validatePermission} from "../Components/ValidatePermission";
+
 
 const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
@@ -13,6 +15,7 @@ const MovieDetails = () => {
     genres: [],
     language: "English",
   });
+  const [permissions, setPermissions] = useState([]);
   const genresList = [
     "Action",
     "Adventure",
@@ -31,7 +34,12 @@ const MovieDetails = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getMovieById = async () => {
+    const getPermissions = async () => { 
+        const userPermissions = await validatePermission(navigate);
+        setPermissions(userPermissions);
+       }
+    
+       const getMovieById = async () => {
       try {
         const { data } = await axios.get(`http://localhost:8000/movies/${id}`);
         setMovie(data);
@@ -48,7 +56,10 @@ const MovieDetails = () => {
       }
     };
     getMovieById();
-  }, [id]);
+    getPermissions();
+  }, [id, navigate]);
+
+  const hasPermission = (permission) => permissions.includes(permission);
 
   const updateMovieById = async () => {
     try {
@@ -148,18 +159,22 @@ const MovieDetails = () => {
           </div>
 
           <div className="flex gap-4 mt-6">
+            {hasPermission("Update Movies") && (
             <button
               className="bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600"
               onClick={() => setShowUpdateModal(true)}
             >
               Update
             </button>
+            )}
+            {hasPermission("Delete Movies") && (
             <button
               className="bg-red-500 text-white px-4 py-2 rounded-lg shadow hover:bg-red-600"
               onClick={() => setShowDeleteModal(true)}
             >
               Delete
             </button>
+            )}
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600"
               onClick={() => navigate("/movies")}

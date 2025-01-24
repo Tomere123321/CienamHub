@@ -2,6 +2,7 @@ const memberService = require('../Services/memberService');
 const express = require('express');
 const router = express.Router();
 
+
 router.get('/', async (req, res) => {
     try {
         const members = await memberService.getMembers();

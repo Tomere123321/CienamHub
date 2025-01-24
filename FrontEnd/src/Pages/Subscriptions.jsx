@@ -10,6 +10,7 @@ import EditMember from "../Components/EditMember";
 import { MdDelete } from "react-icons/md";
 import DeleteMember from "../Components/DeleteMember";
 import { MdOutlineSubscriptions } from "react-icons/md";
+import {validatePermission} from "../Components/ValidatePermission";
 
 const Subscriptions = () => {
   const [members, setMembers] = useState([]);
@@ -19,10 +20,17 @@ const Subscriptions = () => {
   const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
   const [editingMember, setEditingMember] = useState(null);
   const [deletingMember, setDeletingMember] = useState(null);
+  const [permissions, setPermissions] = useState([]);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
-    const getMembers = async () => {
+    const getPermissions = async () => { 
+        const userPermissions = await validatePermission(navigate);
+        setPermissions(userPermissions);
+       }
+    
+       const getMembers = async () => {
       try {
         const { data } = await axios.get("http://localhost:8000/members");
         setMembers(data);
@@ -43,6 +51,7 @@ const Subscriptions = () => {
 
     getMembers();
     getSubscriptions();
+    getPermissions();
 
     const interval = setInterval(() => {
       validateSession(navigate);
@@ -50,6 +59,9 @@ const Subscriptions = () => {
 
     return () => clearInterval(interval);
   }, [navigate]);
+  
+  const hasPermission = (permission) => permissions.includes(permission);
+
 
   const searchMembers = async () => {
     try {
@@ -86,12 +98,14 @@ const Subscriptions = () => {
           Number of Members: {allMembers?.length}
         </h1>
         <div className="flex items-center gap-3">
+          {hasPermission("Create Subscriptions") && (
           <button
             className="btn btn-primary flex items-center gap-2"
             onClick={() => setIsAddMemberOpen(true)}
           >
             <FiPlus /> Add Members
           </button>
+          )}
           <div className="form-control flex items-center relative">
             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
             <input
@@ -139,6 +153,7 @@ const Subscriptions = () => {
                     <td>{subscriptionCount || 0}</td>
                     <td>
                       <div className="flex items-center space-x-2">
+                        {hasPermission("Update Subscriptions") && (
                         <button
                           className="bg-blue-500 text-white hover:bg-blue-600 hover:text-black-500 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
                           onClick={() => setEditingMember(member)}
@@ -146,6 +161,8 @@ const Subscriptions = () => {
                         >
                           <CiEdit className="h-5 w-5" />
                         </button>
+                        )}
+                        {hasPermission("Delete Subscriptions") && (
                         <button
                           className="bg-red-500 text-white hover:bg-red-600 hover:text-black-300 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
                           onClick={() => setDeletingMember(member)}
@@ -153,6 +170,7 @@ const Subscriptions = () => {
                         >
                           <MdDelete className="h-5 w-5" />
                         </button>
+                        )}
                         <button
                           className="bg-green-500 text-white hover:bg-green-600 hover:text-black-700 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
                           onClick={() => navigate(`/subscriptions/${member._id}`)}

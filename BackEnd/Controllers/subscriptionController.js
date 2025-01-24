@@ -2,6 +2,7 @@ const subscriptionsService = require('../Services//subscriptionService');
 const express = require('express');
 const router = express.Router();
 
+
 router.get('/', async (req, res) => {
     try {
         const subs = await subscriptionsService.subscription();

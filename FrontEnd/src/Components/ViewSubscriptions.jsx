@@ -6,19 +6,25 @@ import { useNavigate, useParams } from "react-router-dom";
 import validateSession from "../Components/ValidateSession";
 import AddSubscriptions from "../Components/AddSubscription";
 import { MdDelete } from "react-icons/md";
-import DeleteMember from "./DeleteMember";
 import DeleteSubscription from "./DeleteSubscription";
+import {validatePermission} from "./ValidatePermission";
 
 const ViewSubscriptions = () => {
   const [member, setMember] = useState("");
   const [subscriptions, setSubscriptions] = useState([]);
   const [isAddsubOpen, setIsAddsubOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(null);
+  const [permissions, setPermissions] = useState([]);
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
-    const getMemberData = async () => {
+    const getPermissions = async () => { 
+        const userPermissions = await validatePermission(navigate);
+        setPermissions(userPermissions);
+       }
+    
+       const getMemberData = async () => {
       try {
         const { data } = await axios.get(`http://localhost:8000/members/${id}`);
         setMember(data);
@@ -40,6 +46,7 @@ const ViewSubscriptions = () => {
     };
     getMemberData();
     getSubscriptionsData();
+    getPermissions();
 
     const interval = setInterval(() => {
       validateSession(navigate);
@@ -47,6 +54,9 @@ const ViewSubscriptions = () => {
 
     return () => clearInterval(interval);
   }, [id, navigate]);
+
+  const hasPermission = (permission) => permissions.includes(permission);
+
 
   if (!member) {
     return <div>Loading member details...</div>;
@@ -60,12 +70,14 @@ const ViewSubscriptions = () => {
           {member?.name} Subscriptions: {subscriptions?.length}
         </h1>
         <div className="flex items-center gap-3">
+          {hasPermission("Create Subscriptions") && (
           <button
             className="btn btn-primary flex items-center gap-2"
             onClick={() => setIsAddsubOpen(true)}
           >
             <FiPlus /> Add Subscriptions
           </button>
+          )}
         </div>
       </div>
 
@@ -108,6 +120,7 @@ const ViewSubscriptions = () => {
                     <td>{movieDate}</td>
                     <td>
                       <div className="flex items-center gap-2">
+                      {hasPermission("Delete Subscriptions") && (
                         <button
                           className="bg-red-500 text-white px-3 py-2 rounded-lg shadow-md hover:bg-red-600"
                           title={`Delete ${member.name} subscription`}
@@ -115,6 +128,7 @@ const ViewSubscriptions = () => {
                         >
                           <MdDelete className="h-5 w-5" />
                         </button>
+                        )}
                       </div>
                     </td>
                   </tr>

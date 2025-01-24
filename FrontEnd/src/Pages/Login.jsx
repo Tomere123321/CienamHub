@@ -12,6 +12,17 @@ const Login = () => {
   const checkLogin = async (event) => {
     event.preventDefault();
     try {
+
+      const { data: users } = await axios.get("http://localhost:8000/users");
+      const loggedInUser = users.find((user) => user.userName === userName);
+
+      if (!loggedInUser) {
+        toast.error("User not found.");
+        return;
+      }
+
+      const { _id: userId } = loggedInUser;
+
       if (!password || !userName) {
         toast.error("Please fill in all fields");
         return;
@@ -22,6 +33,7 @@ const Login = () => {
         return;
       }
 
+    
       const response = await axios.post("http://localhost:8000/auth/login", {
         userName,
         password,
@@ -32,6 +44,7 @@ const Login = () => {
       localStorage.setItem("userName", returnedUserName);
       localStorage.setItem("token", token);
       localStorage.setItem("sessionTimeOut", sessionTimeOut);
+      localStorage.setItem("userId", userId);
       
       toast.success("Login successful");
      

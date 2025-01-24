@@ -75,17 +75,19 @@ const Usersmanagement = () => {
   };
 
   const permissionColor = (permission) => {
-    const colorMap = {
-      "View Subscriptions": "bg-blue-400 text-black",
-      "View Movies": "bg-blue-400 text-black",
-      "Update Subscriptions": "bg-purple-400 text-black",
-      "Update Movies": "bg-purple-400 text-black",
-      "Create Subscriptions": "bg-green-400 text-black",
-      "Create Movies": "bg-green-400 text-black",
-      "Delete Subscriptions": "bg-red-400 text-black",
-      "Delete Movies": "bg-red-400 text-black",
-    };
-    return colorMap[permission] || "bg-gray-200 text-gray-800";
+    if (permission.startsWith("View")) {
+      return "bg-blue-400 text-black";
+    }
+    if (permission.startsWith("Update")) {
+      return "bg-purple-400 text-black";
+    }
+    if (permission.startsWith("Create")) {
+      return "bg-green-400 text-black";
+    }
+    if (permission.startsWith("Delete")) {
+      return "bg-red-400 text-black";
+    }
+    return "bg-gray-200 text-gray-800"; 
   };
 
   const getUserPermissions = (userId) => {
@@ -190,7 +192,7 @@ const Usersmanagement = () => {
                       </button>
                       <button
                         className="bg-green-500 text-white hover:bg-green-600 px-3 py-2 rounded-lg shadow-md transition duration-200 ease-in-out"
-                        onClick={() => navigate(`/usersManagement/permissions/${user._id}`)}
+                        onClick={() => navigate(`/usersManagement/${user._id}`)}
                         title={`Edit ${user.userName} Permissions`}
                       >
                         <MdAdminPanelSettings className="h-5 w-5" />

@@ -31,7 +31,7 @@ const EditUsers = () => {
           userName: data?.userName || "",
           sessionTimeOut: parseInt(data?.sessionTimeOut),
           isAdmin: data?.isAdmin || false,
-          password: data?.password || "",
+          password: "",
         });
       } catch (error) {
         toast.error("Failed to fetch user data. Please try again.");
@@ -40,8 +40,11 @@ const EditUsers = () => {
 
     const getPermissions = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8000/permissions");
-        setPermissions(data);
+        const { data } = await axios.get(`http://localhost:8000/permissions`);
+        const permissionsByid = data.filter(
+          (permission) => permission.userId === id
+        );
+        setPermissions(permissionsByid);
       } catch (error) {
         toast.error("Failed to get permissions");
       }
@@ -78,6 +81,17 @@ const EditUsers = () => {
       navigate("/usersmanagement");
     } catch (error) {
       toast.error("Failed to update User. Please try again.");
+    }
+  };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.delete(`http://localhost:8000/users/delete/${id}`);
+      toast.success(`User deleted successfully`);
+      navigate("/usersmanagement");
+    } catch (error) {
+      toast.error("Failed to delete User. Please try again.");
     }
   };
 
@@ -141,7 +155,10 @@ const EditUsers = () => {
             max={1000}
             value={updateUser.sessionTimeOut}
             onChange={(e) =>
-              setUpdateUser({ ...updateUser, sessionTimeOut: e.target.value })
+              setUpdateUser({
+                ...updateUser,
+                sessionTimeOut: parseInt(e.target.value),
+              })
             }
           />
         </div>
@@ -155,7 +172,7 @@ const EditUsers = () => {
           />
           <label className="text-sm font-medium">Is Admin</label>
         </div>
-        
+
         <div className="flex justify-end gap-4">
           <button
             type="button"
@@ -167,6 +184,31 @@ const EditUsers = () => {
           <button type="submit" className="btn btn-success text-white">
             Update
           </button>
+          <button
+            type="button"
+            className="btn btn-warning text-white"
+            onClick={handleDelete}
+          >
+            Delete
+          </button>
+        </div>
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold mb-2">Permissions</h2>
+          <div className="flex flex-col gap-2">
+            {permissions.length > 0 ? (
+              permissions.map((permission, index) => (
+                <div key={index}>
+                  <ul className="list-disc list-inside">
+                    {permission.permissions.map((perm, i) => (
+                      <li key={i}>{perm}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <p>No permissions available for this user.</p>
+            )}
+          </div>
         </div>
       </form>
     </div>
@@ -174,4 +216,3 @@ const EditUsers = () => {
 };
 
 export default EditUsers;
-
