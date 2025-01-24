@@ -5,7 +5,7 @@ Cinema Management System - A management system designed for cinemas or private t
 ---
 
 ## 🖼️ Screenshot
-![Screenshot of the Project](src/assets/ProjectScreenShot.png)
+![Screenshot of the Project](../Movies_Subscriptions_manegment/FrontEnd/src/assets/ProjectScreenShot.png)
 
 
 ---
