@@ -46,7 +46,6 @@ This Cinema Management System is a **full-stack web application** designed to ma
 - **JWT (JSON Web Tokens)**: Secure authentication and authorization.
 - **Bcrypt**: For password hashing.
 - **Cors**: To allow cross-origin requests.
-- **Jsonfile**: For JSON data handling (used initially during setup).
 - **Axios**: For external API calls (e.g., TVMaze and JSONPlaceholder).
 
 ---
